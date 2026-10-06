@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>豆豆写作乐园</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF6E6; --paper:#FFFFFF; --ink:#3B3024; --soft:#8A7A66; --line:#EFDDBF;
+    --orange:#FF8A3D; --orange-d:#E86F22; --green:#3FAE76; --green-l:#E3F6EC;
+    --blue:#3D86D6; --blue-l:#E6F1FC; --yellow:#FFD45C; --pink:#FF8A80;
+    --shadow:0 4px 0 var(--line);
+    --hand:"ZCOOL KuaiLe","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    --body:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.6;
+    background-image:radial-gradient(#F3E2C4 1.2px,transparent 1.2px);background-size:22px 22px}
+  button{font:inherit;cursor:pointer;border:none;color:inherit;background:none}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  input,textarea{font:inherit;color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px 48px}
+
+  /* header */
+  header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 0 10px}
+  .brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+  .brand h1{font-family:var(--hand);font-weight:400;font-size:30px;margin:0;letter-spacing:1px}
+  .mascot{width:52px;height:52px;flex:none}
+  .mascot.sm{width:40px;height:40px}
+  .stars{font-family:var(--hand);font-size:22px;background:var(--paper);border:3px solid var(--line);border-radius:999px;padding:2px 14px}
+  .stars.pop{animation:pop .5s}
+  @keyframes pop{50%{transform:scale(1.25)}}
+  .iconbtn{width:44px;height:44px;border-radius:50%;background:var(--paper);border:3px solid var(--line);font-size:20px}
+  .iconbtn.off{opacity:.45}
+  .voice-badge{font-size:14px;padding:3px 10px;border-radius:999px;background:var(--paper);border:2px solid var(--line);color:var(--soft);cursor:pointer}
+  .voice-badge.ok{border-color:#9ED7B8;color:#23784E;background:var(--green-l)}
+  nav{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 18px}
+  nav button{font-family:var(--hand);font-size:21px;padding:6px 18px;border-radius:14px;background:var(--paper);border:3px solid var(--line)}
+  nav button.on{background:var(--orange);border-color:var(--orange-d);color:#fff}
+
+  section.view{display:none}
+  section.view.active{display:block;animation:fade .25s}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}}
+  .card{background:var(--paper);border:3px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:20px}
+  h2{font-family:var(--hand);font-weight:400;font-size:28px;margin:0 0 12px}
+  h3{font-family:var(--hand);font-weight:400;font-size:22px;margin:0 0 8px}
+  .muted{color:var(--soft);font-size:16px}
+
+  .btn{font-family:var(--hand);font-size:21px;padding:10px 22px;border-radius:16px;background:var(--orange);color:#fff;box-shadow:0 4px 0 var(--orange-d)}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--orange-d)}
+  .btn.green{background:var(--green);box-shadow:0 4px 0 #2C8A5B}
+  .btn.blue{background:var(--blue);box-shadow:0 4px 0 #2A69AE}
+  .btn.ghost{background:var(--paper);color:var(--ink);border:3px solid var(--line);box-shadow:0 4px 0 var(--line)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+  /* home */
+  .types{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:8px 0 20px}
+  .type{text-align:left;background:var(--paper);border:3px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);transition:transform .15s}
+  .type:hover{transform:translateY(-2px)}
+  .type.on{border-color:var(--orange);background:#FFF0E3}
+  .type .em{font-size:40px;line-height:1}
+  .type b{display:block;font-family:var(--hand);font-weight:400;font-size:24px;margin:6px 0 2px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .chip{padding:5px 14px;border-radius:999px;background:var(--blue-l);border:2px solid #C8DEF5;font-size:18px}
+  .chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .topic-in{width:100%;max-width:420px;padding:10px 14px;border-radius:14px;border:3px solid var(--line);background:#FFFDF8;font-size:20px}
+  .topic-in:focus,.answer:focus{outline:none;border-color:var(--orange)}
+  .parent{margin-top:22px;font-size:15px;color:var(--soft);border-top:2px dashed var(--line);padding-top:12px}
+
+  /* write */
+  .steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .step{font-size:16px;padding:4px 12px;border-radius:999px;background:#F4EBDD;color:var(--soft);border:2px solid transparent}
+  .step.done{background:var(--green-l);color:#23784E}
+  .step.cur{background:#FFF0E3;color:var(--orange-d);border-color:var(--orange);font-weight:700}
+  .wgrid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media (min-width:900px){.wgrid{grid-template-columns:1.6fr 1fr}}
+  .chat{min-height:320px;max-height:58vh;overflow-y:auto;padding:4px 4px 8px;display:flex;flex-direction:column;gap:12px}
+  .msg{display:flex;gap:10px;align-items:flex-end;max-width:92%}
+  .msg.kid{align-self:flex-end;flex-direction:row-reverse}
+  .bub{padding:10px 16px;border-radius:18px;background:#FFF3DF;border:2px solid #F5DDB5;white-space:pre-wrap;word-break:break-word}
+  .msg.kid .bub{background:var(--blue-l);border-color:#C8DEF5}
+  .bub.q{background:#fff;border-color:var(--orange);font-size:21px;font-weight:600}
+  .bub.praise{background:#FFFBE6;border-color:#F6E08E}
+  .bub.err{background:#FFF0EF;border-color:#F5C3BE;font-size:15px}
+  .say{margin-left:6px;font-size:16px;opacity:.7}
+  .dots span{display:inline-block;width:8px;height:8px;margin:0 2px;border-radius:50%;background:var(--orange);animation:b 1s infinite}
+  .dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+  @keyframes b{50%{transform:translateY(-6px);opacity:.4}}
+  .hintbox{background:var(--green-l);border:2px dashed #9ED7B8;border-radius:14px;padding:8px 14px;margin:8px 0;font-size:18px}
+  .answer{width:100%;min-height:76px;resize:vertical;padding:12px 14px;border-radius:16px;border:3px solid var(--line);background:#FFFDF8;font-size:21px;line-height:1.5}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+  .tools .spacer{flex:1}
+  .mic.rec{background:var(--pink);box-shadow:0 4px 0 #D9655B;animation:pulse 1s infinite}
+  @keyframes pulse{50%{transform:scale(1.06)}}
+  .draft .ditem{padding:8px 0;border-bottom:2px dashed var(--line)}
+  .draft .ditem:last-child{border:none}
+  .draft .lab{font-size:15px;color:var(--soft)}
+  .draft .txt{font-size:18px}
+  .draft .ditem.cur .lab{color:var(--orange-d);font-weight:700}
+  .draft .empty{color:#CDBFA9}
+
+  /* result */
+  .essay{font-size:22px;line-height:44px;padding:14px 22px;border-radius:16px;background-color:#fff;
+    background-image:repeating-linear-gradient(transparent 0 42px,#F1E6D3 42px 44px);background-position:0 14px;background-attachment:local;
+    border:3px solid var(--line);min-height:120px}
+  .essay p{margin:0;text-indent:2em}
+  .essay[contenteditable=true]{outline:3px dashed var(--orange);background-color:#FFFDF6}
+  .essay-title{font-family:var(--hand);font-size:30px;text-align:center;margin:0 0 10px}
+  .notes{display:grid;gap:12px;margin:16px 0}
+  @media (min-width:800px){.notes{grid-template-columns:1fr 1fr}}
+  .note{border-radius:16px;padding:12px 16px;font-size:18px}
+  .note.best{background:#FFFBE6;border:2px solid #F6E08E}
+  .note.chg{background:var(--blue-l);border:2px solid #C8DEF5}
+  .note.tip{background:var(--green-l);border:2px solid #9ED7B8}
+  .note ul{margin:4px 0 0;padding-left:22px}
+  .tabs{display:flex;gap:8px;margin:0 0 10px;flex-wrap:wrap}
+  .tab{font-family:var(--hand);font-size:20px;padding:6px 18px;border-radius:14px 14px 0 0;background:#F4EBDD;border:3px solid var(--line);border-bottom:none;color:var(--soft)}
+  .tab.on{background:#fff;color:var(--ink);border-color:var(--orange)}
+  .scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+  .score{background:#FFF8EC;border:2px solid var(--line);border-radius:14px;padding:8px 12px;font-size:16px}
+  .score b{display:block;font-size:22px;letter-spacing:2px;color:#E8A400}
+  .hl{border-left:5px solid var(--orange);background:#FFF8EC;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:17px}
+  .hl .before{color:var(--soft);text-decoration:line-through;text-decoration-color:#d8c3a3}
+  .hl .after{font-weight:600;margin:2px 0}
+  .skill{display:inline-block;font-size:14px;background:var(--orange);color:#fff;border-radius:999px;padding:0 10px;margin-right:6px}
+  .challenge{background:#F0F7FF;border:3px dashed #9CC3EE;border-radius:18px;padding:14px 16px;margin-top:14px}
+  .challenge .orig{font-size:21px;font-weight:600;margin:6px 0}
+  .skillcard{background:#FFF9E3;border:2px dashed #F2CF63;border-radius:14px;padding:6px 12px;font-size:16px;align-self:flex-start;margin-left:50px;max-width:85%}
+  .selfbox{display:none;margin-top:12px}
+  .selfbox.show{display:block}
+  .tts-status{font-size:14px;margin-left:8px}
+  dialog select{width:100%;padding:8px 12px;border:2px solid var(--line);border-radius:10px;font-size:16px;background:#fff}
+  details{margin-top:10px;font-size:17px}
+  summary{cursor:pointer;color:var(--soft)}
+
+  /* game */
+  .sentence{font-size:28px;font-weight:700;text-align:center;padding:16px;background:#FFF3DF;border-radius:18px;border:3px solid #F5DDB5;margin:10px 0}
+  .round{font-family:var(--hand);font-size:24px;color:var(--orange-d)}
+  .ladder{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+  .rung{background:var(--green-l);border-radius:12px;padding:6px 12px;font-size:18px;border-left:6px solid var(--green)}
+  .fb{margin-top:10px;font-size:19px;min-height:30px}
+  .fb.ok{color:#23784E}.fb.no{color:#C0473C}
+
+  /* book */
+  .bookgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .entry{cursor:pointer}
+  .entry .t{font-family:var(--hand);font-size:23px}
+  .entry .m{font-size:14px;color:var(--soft)}
+  .entry .p{font-size:17px;margin-top:6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+
+  /* copy mode overlay */
+  .overlay{position:fixed;inset:0;background:rgba(59,48,36,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+  .overlay.show{display:flex}
+  .sheet{background:#fff;border-radius:24px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:24px}
+  .copytext{font-size:34px;line-height:78px;letter-spacing:3px;background:repeating-linear-gradient(transparent 0 75px,#E9DCC6 75px 78px)}
+  .copytext p{margin:0;text-indent:2em}
+
+  dialog{border:3px solid var(--line);border-radius:22px;padding:22px;max-width:480px;width:calc(100% - 32px);color:var(--ink)}
+  dialog::backdrop{background:rgba(59,48,36,.45)}
+  dialog label{display:block;font-size:15px;color:var(--soft);margin-top:10px}
+  dialog input{width:100%;padding:8px 12px;border:2px solid var(--line);border-radius:10px;font-size:16px}
+
+  .confetti{position:fixed;top:-20px;font-size:26px;pointer-events:none;z-index:60;animation:fall 1.8s ease-in forwards}
+  @keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.2}}
+
+  #print-area{display:none}
+  @media print{
+    body{background:#fff}
+    body>*:not(#print-area){display:none!important}
+    #print-area{display:block;font-size:22pt;line-height:2.2}
+    #print-area h1{text-align:center;font-family:var(--hand);font-weight:400}
+    #print-area p{text-indent:2em;margin:0}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span id="logo"></span><h1>豆豆写作乐园</h1></div>
+    <div class="stars" id="stars">⭐ 0</div>
+    <span class="voice-badge" id="voiceBadge" title="现在用的朗读声音">…</span>
+    <button class="iconbtn" id="ttsBtn" title="自动朗读问题">🔊</button>
+    <button class="iconbtn" id="setBtn" title="设置">⚙️</button>
+  </header>
+  <nav>
+    <button data-v="v-home" class="on">✏️ 写短文</button>
+    <button data-v="v-game">🌱 扩句游戏</button>
+    <button data-v="v-book">📒 我的作品本</button>
+  </nav>
+
+  <!-- 首页：选类型和题目 -->
+  <section class="view active" id="v-home">
+    <div class="card">
+      <div id="resumeBox"></div>
+      <h2>今天想写什么呀？</h2>
+      <div class="types" id="types"></div>
+      <div id="topicBox" style="display:none">
+        <h3>选一个题目，或者自己想一个：</h3>
+        <div class="chips" id="topicChips"></div>
+        <div class="row">
+          <input class="topic-in" id="topicIn" placeholder="自己写题目，比如：会发光的水母" maxlength="30">
+          <button class="btn" id="startBtn">开始写 ➜</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:4px">
+        <button class="btn ghost" id="selfToggle" style="font-size:18px">📄 我自己写好了，请老师看看</button>
+      </div>
+      <div class="selfbox" id="selfBox">
+        <input class="topic-in" id="selfTitle" placeholder="题目（可以不写）" maxlength="30" style="margin-bottom:8px">
+        <textarea class="answer" id="selfText" style="min-height:160px" placeholder="把你写好的短文打在这里，或者点🎤读出来"></textarea>
+        <div class="tools">
+          <button class="btn blue mic" id="selfMic">🎤 说话</button>
+          <span class="spacer"></span>
+          <button class="btn" id="selfGo">请老师看看 ➜</button>
+        </div>
+      </div>
+      <div class="parent">给家长：写的过程中，豆豆老师只提问、只教方法（每一步有一个“写作锦囊”），不替孩子写句子。写完后会出两个版本：“我的作文”只修标点和错字，保留孩子原话；“老师润色版”在孩子的内容上示范怎样写得更好，并逐句说明用了什么方法。最后还有一个“升级挑战”，请孩子自己动手改一句。</div>
+    </div>
+  </section>
+
+  <!-- 写作：一问一答 -->
+  <section class="view" id="v-write">
+    <div class="row" style="margin-bottom:8px">
+      <h2 id="wTitle" style="margin:0;margin-right:auto"></h2>
+      <button class="btn ghost" id="quitBtn" style="font-size:17px;padding:6px 14px">⬅ 换题目</button>
+    </div>
+    <div class="steps" id="steps"></div>
+    <div class="wgrid">
+      <div class="card">
+        <div class="chat" id="chat"></div>
+        <div id="hintSlot"></div>
+        <textarea class="answer" id="answer" placeholder="在这里写，或者点🎤说出来～"></textarea>
+        <div class="tools">
+          <button class="btn blue mic" id="micBtn">🎤 说话</button>
+          <button class="btn green" id="hintBtn">💡 想不出来</button>
+          <span class="spacer"></span>
+          <button class="btn ghost" id="skipBtn" style="font-size:18px">这步跳过</button>
+          <button class="btn" id="sendBtn">发送 ➤</button>
+        </div>
+      </div>
+      <div class="card draft">
+        <h3>📝 我的草稿</h3>
+        <div class="muted" style="margin-bottom:6px">你说的话会一句句放在这里</div>
+        <div id="draft"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结果：短文 -->
+  <section class="view" id="v-result">
+    <div class="card">
+      <div class="essay-title" id="rTitle"></div>
+      <div class="tabs">
+        <button class="tab on" data-t="draft">📝 我的作文</button>
+        <button class="tab" data-t="polished">✨ 老师润色版</button>
+      </div>
+      <div class="essay" id="rEssay"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn blue" id="rRead">🔊 读给我听</button>
+        <button class="btn ghost" id="rEdit">✏️ 我要改一改</button>
+        <button class="btn ghost" id="rCopy">✍️ 抄写模式</button>
+        <button class="btn green" id="rSave">💾 存进作品本</button>
+        <button class="btn ghost" id="rPrint">🖨 打印</button>
+        <button class="btn" id="rAgain">🔁 再写一篇</button>
+      </div>
+      <div id="rReview"></div>
+      <details id="rSaidBox"><summary>看看我原来说的话</summary><div id="rSaid" style="white-space:pre-wrap;margin-top:6px"></div></details>
+    </div>
+  </section>
+
+  <!-- 扩句游戏 -->
+  <section class="view" id="v-game">
+    <div class="card">
+      <h2>🌱 让句子长大！</h2>
+      <div class="muted">每一轮在句子上加一点东西，看它能长多长。</div>
+      <div class="sentence" id="gSentence"></div>
+      <div class="round" id="gRound"></div>
+      <div class="muted" id="gEx"></div>
+      <textarea class="answer" id="gIn" style="margin-top:10px;min-height:64px"></textarea>
+      <div class="tools">
+        <button class="btn blue mic" id="gMic">🎤 说话</button>
+        <button class="btn ghost" id="gNew" style="font-size:18px">🎲 换一句</button>
+        <button class="btn ghost" id="gOwn" style="font-size:18px">✍️ 我自己出一句</button>
+        <span class="spacer"></span>
+        <button class="btn ghost" id="gSkip" style="font-size:18px">跳过这轮</button>
+        <button class="btn" id="gCheck">检查 ✔</button>
+      </div>
+      <div class="fb" id="gFb"></div>
+      <div class="ladder" id="gLadder"></div>
+    </div>
+  </section>
+
+  <!-- 作品本 -->
+  <section class="view" id="v-book">
+    <h2>📒 我的作品本</h2>
+    <div class="bookgrid" id="book"></div>
+  </section>
+</div>
+
+<!-- 抄写模式 -->
+<div class="overlay" id="copyOv">
+  <div class="sheet">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <h2 id="copyTitle" style="margin:0"></h2>
+      <button class="btn ghost" id="copyClose">关闭</button>
+    </div>
+    <div class="muted" style="margin-bottom:8px">拿出本子，一个字一个字抄下来吧！</div>
+    <div class="copytext" id="copyText"></div>
+  </div>
+</div>
+
+<!-- 作品查看 -->
+<div class="overlay" id="viewOv">
+  <div class="sheet">
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <h2 id="viewTitle" style="margin:0"></h2>
+      <button class="btn ghost" id="viewClose">关闭</button>
+    </div>
+    <div class="essay" id="viewText"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn blue" id="viewRead">🔊 读一读</button>
+      <button class="btn ghost" id="viewSwitch">✨ 看润色版</button>
+      <button class="btn ghost" id="viewCopy">✍️ 抄写模式</button>
+      <button class="btn ghost" id="viewPrint">🖨 打印</button>
+      <span style="flex:1"></span>
+      <button class="btn ghost" id="viewDel" style="color:#C0473C">删除</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="loginOv">
+  <div class="sheet" style="max-width:420px;text-align:center">
+    <div id="loginLogo"></div>
+    <h2>豆豆写作乐园</h2>
+    <div class="muted" style="margin-bottom:12px">请输入家庭口令</div>
+    <input class="topic-in" id="loginPw" type="password" autocomplete="current-password" style="text-align:center">
+    <div class="fb no" id="loginMsg"></div>
+    <button class="btn" id="loginGo" style="margin-top:6px">进入 ➜</button>
+  </div>
+</div>
+
+<dialog id="setDlg">
+  <h3>⚙️ 设置（家长用）</h3>
+  <div class="muted" id="sMode"></div>
+  <label>AI 接口地址</label><input id="sBase">
+  <label>AI API Key</label><input id="sKey" type="password">
+  <label>AI 模型</label><input id="sModel">
+  <div class="row" style="margin-top:10px">
+    <button class="btn ghost" id="sTest" style="font-size:17px">测试 AI</button>
+    <span class="muted" id="sMsg"></span>
+  </div>
+  <hr style="border:none;border-top:2px dashed var(--line);margin:16px 0 4px">
+  <label>朗读声音</label>
+  <select id="sTtsMode">
+    <option value="doubao">豆包语音（真人感，推荐）</option>
+    <option value="system">系统朗读（不联网）</option>
+  </select>
+  <label>豆包音色</label>
+  <select id="sVoice">
+    <option value="zh_female_xiaohe_uranus_bigtts">小何（温柔女声）</option>
+    <option value="zh_female_vv_uranus_bigtts">薇薇（活泼女声）</option>
+    <option value="zh_female_tianmeixiaoyuan_uranus_bigtts">甜美小源</option>
+    <option value="zh_female_shuangkuaisisi_uranus_bigtts">爽快思思（讲故事）</option>
+    <option value="zh_male_shaonianzixin_uranus_bigtts">少年梓辛（男声）</option>
+  </select>
+  <label>豆包语音 API Key（用启动器打开时不用填）</label><input id="sTtsKey" type="password" placeholder="直接双击打开网页时才需要">
+  <div class="row" style="margin-top:10px">
+    <button class="btn ghost" id="sTtsTest" style="font-size:17px">试听</button>
+    <span class="muted" id="sTtsMsg"></span>
+  </div>
+  <div class="row" style="margin-top:14px;justify-content:flex-end">
+    <button class="btn ghost" id="sCancel" style="font-size:17px">取消</button>
+    <button class="btn" id="sSave" style="font-size:17px">保存</button>
+  </div>
+</dialog>
+
+<div id="print-area"></div>
+
+<script>
+/* ====== AI 配置 ====== */
+const CONFIG = {
+  baseUrl: "https://doudou-newapi.com",
+  apiKey:  "",
+  model:   "DeepSeek-V4.1-Flash",
+  // 豆包语音合成 2.0（火山引擎 seed-tts-2.0）
+  ttsMode: "doubao",                       // doubao | system
+  ttsVoice: "zh_female_xiaohe_uranus_bigtts",
+  ttsKey: "",                              // 用 start.command 启动时留空，密钥在 .env 里
+  ttsUrl: "https://openspeech.bytedance.com/api/v3/tts/unidirectional",
+  ttsResource: "seed-tts-2.0",
+  ttsRate: -10                             // 稍慢一点，适合孩子
+};
+let PROXY = false;   // 找到本地启动器时为 true：AI 和朗读都走本地服务器
+let API = '';        // 启动器地址（同源时为空）
+const LAUNCHER = 'http://localhost:8765/';
+
+/* ====== 小工具 ====== */
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch{ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch{} }
+};
+function cfg(){ return Object.assign({}, CONFIG, store.get('dd_cfg', {})); }
+function h(tag, attrs = {}, ...kids){
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)){
+    if (k === 'class') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v != null && v !== false) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()){ if (c == null || c === false) continue; e.append(c.nodeType ? c : document.createTextNode(String(c))); }
+  return e;
+}
+function mascot(cls = ''){
+  const d = document.createElement('span');
+  d.innerHTML = `<svg viewBox="0 0 64 64" class="mascot ${cls}" aria-hidden="true">
+    <path d="M32 13 q3 -8 11 -7" stroke="#3FAE76" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="45" cy="6.5" rx="6" ry="3.4" fill="#3FAE76" transform="rotate(-20 45 6.5)"/>
+    <ellipse cx="32" cy="37" rx="22" ry="23" fill="#FFB74D" stroke="#3B3024" stroke-width="3"/>
+    <circle cx="24" cy="34" r="3.6" fill="#3B3024"/><circle cx="40" cy="34" r="3.6" fill="#3B3024"/>
+    <circle cx="25.2" cy="32.8" r="1.2" fill="#fff"/><circle cx="41.2" cy="32.8" r="1.2" fill="#fff"/>
+    <ellipse cx="18.5" cy="42" rx="4" ry="2.4" fill="#FF8A80" opacity=".75"/><ellipse cx="45.5" cy="42" rx="4" ry="2.4" fill="#FF8A80" opacity=".75"/>
+    <path d="M27 44 q5 5 10 0" stroke="#3B3024" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
+  return d.firstElementChild;
+}
+$('#logo').append(mascot());
+
+/* ====== 星星 ====== */
+let stars = store.get('dd_stars', 0);
+/* ====== 数据层：服务器模式存在服务器上，否则存在本机浏览器 ====== */
+const Data = {
+  server:false, works:null, profile:{stars:0, prefs:{}}, draft:null, _pt:null, _dt:null,
+  async req(method, path, body){
+    const r = await fetch(API + path, {method, headers:{'Content-Type':'application/json'}, credentials:'same-origin',
+      body: body === undefined ? undefined : JSON.stringify(body)});
+    if (r.status === 401){ showLogin(); throw new Error('需要家庭口令'); }
+    if (!r.ok) throw new Error('保存失败 ' + r.status);
+    return r.json();
+  },
+  async load(){
+    if (!this.server){ this.works = store.get('dd_book', []); return; }
+    const d = await this.req('GET', 'api/data');
+    this.works = d.works || []; this.profile = d.profile || {stars:0, prefs:{}}; this.draft = d.draft || null;
+    stars = Number(this.profile.stars) || 0; renderStars();
+    if (this.profile.prefs && 'autoTTS' in this.profile.prefs){ autoTTS = !!this.profile.prefs.autoTTS; renderTTS(); }
+    if (this.profile.prefs?.tts){ const c = store.get('dd_cfg', {}); store.set('dd_cfg', {...c, ...this.profile.prefs.tts}); renderBadge(); }
+  },
+  list(){ return this.works || store.get('dd_book', []); },
+  async saveWork(w){
+    const list = this.list(), i = list.findIndex(x => String(x.id) === String(w.id));
+    if (i >= 0) list[i] = {...list[i], ...w}; else list.unshift(w);
+    this.works = list;
+    if (!this.server){ store.set('dd_book', list); return; }
+    try{ await this.req('POST', 'api/works', {work:w}); }catch(e){ toast('作品没存上：' + e.message + '，稍后会再试'); setTimeout(() => this.saveWork(w).catch(() => {}), 20000); }
+  },
+  async deleteWork(id){
+    this.works = this.list().filter(x => String(x.id) !== String(id));
+    if (!this.server){ store.set('dd_book', this.works); return; }
+    await this.req('DELETE', 'api/works/' + encodeURIComponent(id));
+  },
+  saveProfile(patch){
+    this.profile = {...this.profile, ...patch, prefs:{...(this.profile.prefs || {}), ...(patch.prefs || {})}};
+    if (!this.server) return;
+    clearTimeout(this._pt);
+    this._pt = setTimeout(() => this.req('PUT', 'api/profile', {stars:this.profile.stars, prefs:this.profile.prefs}).catch(() => {}), 800);
+  },
+  saveDraft(d){
+    this.draft = d;
+    if (!this.server){ store.set('dd_draft', d); return; }
+    clearTimeout(this._dt);
+    this._dt = setTimeout(() => this.req('PUT', 'api/draft', {draft:d}).catch(() => {}), 600);
+  },
+  getDraft(){ return this.server ? this.draft : store.get('dd_draft', null); }
+};
+function renderStars(){ $('#stars').textContent = '⭐ ' + stars; }
+function addStars(n){
+  stars += n; store.set('dd_stars', stars); Data.saveProfile({stars}); renderStars();
+  const s = $('#stars'); s.classList.remove('pop'); void s.offsetWidth; s.classList.add('pop');
+}
+renderStars();
+function confetti(){
+  const em = ['⭐','🌟','🎉','✨','🍄','💛'];
+  for (let i = 0; i < 26; i++){
+    const c = h('div', {class:'confetti'}, em[i % em.length]);
+    c.style.left = Math.random() * 100 + 'vw'; c.style.animationDelay = Math.random() * .6 + 's';
+    document.body.append(c); setTimeout(() => c.remove(), 2600);
+  }
+}
+
+/* ====== 朗读 & 语音输入 ====== */
+let autoTTS = store.get('dd_tts', true);
+function renderTTS(){ $('#ttsBtn').classList.toggle('off', !autoTTS); }
+$('#ttsBtn').onclick = () => { autoTTS = !autoTTS; store.set('dd_tts', autoTTS); Data.saveProfile({prefs:{autoTTS}}); renderTTS(); if (!autoTTS) stopSpeak(); };
+renderTTS();
+
+function cleanSpeech(t){
+  return String(t || '').replace(/[\u{1F000}-\u{1FAFF}☀-➿️‍]/gu, '').replace(/\s+/g, ' ').trim();
+}
+function systemSpeak(t){
+  return new Promise(resolve => {
+    if (!('speechSynthesis' in window)) return resolve();
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = 'zh-CN'; u.rate = 0.9;
+    const vs = speechSynthesis.getVoices();
+    const v = vs.find(v => /zh[-_]CN/i.test(v.lang)) || vs.find(v => /zh/i.test(v.lang));
+    if (v) u.voice = v;
+    u.onend = u.onerror = () => resolve();
+    speechSynthesis.speak(u);
+  });
+}
+// 长文本按句子切成小段，每段不超过 120 字
+function chunkText(t, max = 120){
+  const parts = t.match(/[^。！？!?；;\n]+[。！？!?；;]*/g) || [t];
+  const out = []; let cur = '';
+  for (const p of parts){
+    if ((cur + p).length > max && cur){ out.push(cur); cur = ''; }
+    if (p.length > max){ for (let i = 0; i < p.length; i += max) out.push(p.slice(i, i + max)); }
+    else cur += p;
+  }
+  if (cur.trim()) out.push(cur);
+  return out.map(s => s.trim()).filter(Boolean);
+}
+const ttsCache = new Map();
+function b64ToBytes(b64){ const s = atob(b64); const a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
+async function doubaoAudio(text){
+  const c = cfg(), key = c.ttsVoice + '|' + text;
+  if (ttsCache.has(key)) return ttsCache.get(key);
+  const p = (async () => {
+    let blob;
+    if (PROXY){
+      const r = await fetch(API + 'api/tts', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text, voice:c.ttsVoice, rate:c.ttsRate})});
+      if (!r.ok) throw new Error('朗读服务 ' + r.status + ' ' + (await r.text().catch(() => '')).slice(0, 120));
+      blob = await r.blob();
+    } else {
+      if (!c.ttsKey) throw new Error('没有豆包语音 Key');
+      const r = await fetch(c.ttsUrl, {method:'POST',
+        headers:{'Content-Type':'application/json', 'X-Api-Key':c.ttsKey, 'X-Api-Resource-Id':c.ttsResource,
+          'X-Api-Request-Id':(crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()))},
+        body:JSON.stringify({user:{uid:'doudou-writing'}, req_params:{text, speaker:c.ttsVoice,
+          audio_params:{format:'mp3', sample_rate:24000, speech_rate:c.ttsRate}}})});
+      if (!r.ok) throw new Error('豆包语音 HTTP ' + r.status);
+      const lines = (await r.text()).split('\n'); const chunks = [];
+      for (const line of lines){
+        const s = line.trim().replace(/^data:\s*/, ''); if (!s || s === '[DONE]') continue;
+        let j; try{ j = JSON.parse(s); }catch{ continue; }
+        if (j.code != null && ![0, 20000000].includes(Number(j.code))) throw new Error(j.message || ('豆包语音错误 ' + j.code));
+        if (typeof j.data === 'string' && j.data) chunks.push(b64ToBytes(j.data));
+      }
+      if (!chunks.length) throw new Error('豆包语音没有返回声音');
+      blob = new Blob(chunks, {type:'audio/mpeg'});
+    }
+    if (!blob.size) throw new Error('豆包语音没有返回声音');
+    return URL.createObjectURL(blob);
+  })();
+  ttsCache.set(key, p);
+  p.catch(() => ttsCache.delete(key));
+  return p;
+}
+let speakSeq = 0, curAudio = null, ttsWarned = 0;
+function stopSpeak(){
+  speakSeq++;
+  if (curAudio){ curAudio.pause(); curAudio = null; }
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+}
+function playUrl(url, seq){
+  return new Promise((resolve, reject) => {
+    if (seq !== speakSeq) return resolve();
+    const a = new Audio(url); curAudio = a;
+    a.onended = () => resolve(); a.onerror = () => reject(new Error('播放失败'));
+    a.play().catch(reject);
+  });
+}
+async function speak(t){
+  stopSpeak();
+  const seq = speakSeq, text = cleanSpeech(t);
+  if (!text) return;
+  const c = cfg();
+  const chunks = chunkText(text);
+  if (c.ttsMode === 'doubao' && (PROXY || c.ttsKey)){
+    try{
+      const urls = chunks.map((s, i) => i < 2 ? doubaoAudio(s) : null);   // 先取前两段，边播边取
+      for (let i = 0; i < chunks.length; i++){
+        if (seq !== speakSeq) return;
+        if (i + 1 < chunks.length && !urls[i + 1]) urls[i + 1] = doubaoAudio(chunks[i + 1]);
+        await playUrl(await urls[i], seq);
+      }
+      return;
+    }catch(e){
+      console.warn('豆包朗读失败，改用系统朗读：', e);
+      if (Date.now() - ttsWarned > 15000){ ttsWarned = Date.now(); toast('豆包语音出错了，这次先用系统声音：' + e.message); }
+      if (seq !== speakSeq) return;
+    }
+  }
+  else if (c.ttsMode === 'doubao' && Date.now() - ttsWarned > 60000){
+    ttsWarned = Date.now();
+    toast('现在用的是系统声音：没找到启动器。请双击文件夹里的 start.command 打开网页。');
+  }
+  for (const s of chunks){ if (seq !== speakSeq) return; await systemSpeak(s); }
+}
+function renderBadge(){
+  const c = cfg(), b = $('#voiceBadge');
+  const dou = c.ttsMode === 'doubao' && (PROXY || c.ttsKey);
+  b.textContent = dou ? '🎙 豆包语音' : '🎙 系统声音';
+  b.classList.toggle('ok', !!dou);
+}
+function toast(msg){
+  const t = h('div', {style:'position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#3B3024;color:#fff;padding:10px 18px;border-radius:14px;font-size:15px;z-index:80;max-width:90vw'}, msg);
+  document.body.append(t); setTimeout(() => t.remove(), 5000);
+}
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+function bindMic(btn, target){
+  if (!SR){ btn.style.display = 'none'; return; }
+  let rec = null;
+  btn.onclick = () => {
+    if (rec){ rec.stop(); return; }
+    stopSpeak();
+    rec = new SR(); rec.lang = 'zh-CN'; rec.interimResults = true; rec.continuous = false;
+    const base = target.value;
+    rec.onresult = e => { let s = ''; for (const r of e.results) s += r[0].transcript; target.value = base + s; };
+    rec.onerror = e => { if (e.error === 'not-allowed') alert('需要允许使用麦克风才能说话哦'); };
+    rec.onend = () => { btn.classList.remove('rec'); btn.textContent = '🎤 说话'; rec = null; target.focus(); };
+    btn.classList.add('rec'); btn.textContent = '⏹ 说完了'; rec.start();
+  };
+}
+
+/* ====== 调用 AI ====== */
+async function ai(messages, {temperature = 0.7, json = true, max_tokens = 900} = {}){
+  const c = cfg();
+  let base = c.baseUrl.trim().replace(/\/+$/, '');
+  const direct = /\/v1$/.test(base) ? base + '/chat/completions' : base + '/v1/chat/completions';
+  // 用启动器打开且没在设置里改过 AI 配置时，走本地服务器转发（避免浏览器跨域限制）
+  const useProxy = PROXY && !store.get('dd_cfg', {}).apiKey;
+  const res = await fetch(useProxy ? API + 'api/chat' : direct, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + c.apiKey},
+    body: JSON.stringify({model: c.model, messages, temperature, max_tokens})
+  });
+  if (!res.ok){ const t = await res.text().catch(() => ''); throw new Error('HTTP ' + res.status + ' ' + t.slice(0, 160)); }
+  const d = await res.json();
+  let txt = (d.choices?.[0]?.message?.content || '').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+  if (!json) return txt;
+  txt = txt.replace(/```(?:json)?/g, '');
+  const a = txt.indexOf('{'), b = txt.lastIndexOf('}');
+  if (a < 0 || b < 0) throw new Error('AI 返回格式不对');
+  return JSON.parse(txt.slice(a, b + 1));
+}
+
+const SYS_GUIDE = `你是“豆豆老师”，陪一个8岁的中国小朋友用中文写小短文。你的工作是提问和鼓励，帮孩子自己把话说出来、说具体。
+铁规则：
+1. 绝不替孩子写句子，也不给出完整答案。
+2. 每次只问一个问题，不超过25个字，用二年级孩子听得懂的词，可以加一个表情。
+3. 夸奖要具体：点出孩子回答里的某个词或细节，不超过20个字，不说空洞的“你真棒”。
+4. 提示(hint)只给2到3个简短的选项或角度，用“？”隔开，例如“红色？白色？有斑点？”，不要写成完整句子。
+5. 孩子说错科学知识时，用一个问题温柔地引导，不要长篇纠正。
+6. 写到有毒或危险的动植物时，可以讲它们怎么伤害人，但方向是“了解它、保护自己”，不渲染吓人的画面。
+7. 你也是写作老师：每一步都教一个适合这一步的写作方法（skill），比如“像……一样（比喻）”“用上声音词”“说说摸起来、闻起来怎样（五感）”“用数字说清楚”“写出动作”“和别的东西比一比”“说出心情词”。skill_tip要短（不超过30字），先说方法名，再给一个和本题无关的小例子，例如“比喻：月亮像一只小船”。追问时也可以请孩子试着用上这个方法。
+8. 孩子的回答里用上了好方法（比喻、声音词、动作、数字等），夸奖时点出方法名，例如“你用了比喻，‘像小伞’真形象！”
+只输出JSON，不要输出其他文字。`;
+
+const SYS_REVIEW = `你是“豆豆老师”，一位很会教小学生写作的语文老师。面对的是一个8岁、二年级的中国孩子。孩子给你的是他自己说的话（按写作骨架排好），或者他自己写的短文。你要做三件事：整理、点评、润色示范，并布置一个升级挑战。
+【整理稿 draft】保留孩子的原话、用词和顺序，只加标点、改错别字、补全半句话、加必要的连接词（先、接着、后来、因为、所以、而且），删掉重复。不加孩子没说的内容，读起来就是8岁孩子写的。分2到3段。
+【润色版 polished】在孩子的内容上示范“怎样写得更好”：
+- 加一个吸引人的开头（可以用提问、声音、直接点题）和一个有感受的结尾；
+- 段落之间加过渡，顺序更清楚；
+- 把笼统的话写具体：恰当用上比喻、拟人、声音词、动作、颜色形状、五感、数字；
+- 不添加孩子没说过的新事实或新知识（只能把孩子说的写得更生动）；
+- 语言是小学三年级优秀作文的水平，用孩子能读懂、学得会的词，少用成语，不堆砌辞藻；
+- 150到300字，分3到4段。
+【highlights】从润色版里挑3到5处最值得学的修改：before 是孩子原来的句子（照抄整理稿里的句子），after 是润色后的句子，skill 是方法名（4到6字，如“用比喻”“写出声音”“加个开头”“写出心情”），why 用孩子听得懂的话说为什么更好（不超过25字）。
+【scores】四项各打1到3颗星：内容具体、顺序清楚、用词生动、开头结尾。要真实，但起码1颗。
+【praise】具体夸孩子做得好的地方，点出原文里的词句，不超过40字。
+【focus】这篇最值得练的一点，用鼓励的口气，不超过30字。
+【challenge】从整理稿里挑一句最适合升级的句子 sentence（必须照抄整理稿里的原句，不带句末标点也可以），task 告诉孩子用什么方法改这一句（不超过30字），skill 是方法名，example 是一个和本题无关的示范（如“小狗跑了 → 小狗像一阵风一样跑了”）。
+【fact_note】如果孩子说的科学知识有明显错误，用一两句温柔的话说明正确说法，并且在 draft 和 polished 里都去掉那个错误；没有就留空。
+所有文字都用简体中文，段与段之间用\\n分隔，段首不要加空格。只输出JSON。`;
+
+const SYS_CHALLENGE = `你是“豆豆老师”，在检查8岁孩子的“句子升级”练习。要宽松友好：只要孩子按要求用上了方法、句子基本通顺，就算ok，小错别字直接帮他改掉放进fixed。夸奖要点出孩子用的具体词。不ok时，用一个小问题提示他怎么改，不要直接给出答案。只输出JSON。`;
+
+const SYS_GAME = `你是“豆豆老师”，在和8岁小朋友玩扩句游戏。你要判断孩子有没有按要求给句子加上内容。要宽松：只要加了符合要求的词、句子基本通顺就算ok，小错别字可以放过。夸奖要具体点出孩子加的词。只输出JSON。`;
+
+/* ====== 写作类型和骨架 ====== */
+const TYPES = {
+  thing: { name:'介绍一样东西', emoji:'🍄', desc:'动物、植物、毒蘑菇、身体里的器官……',
+    topics:['毒蘑菇','箭毒蛙','河豚','眼镜蛇','我的心脏','我的牙齿','含羞草'],
+    steps:[
+      {k:'它是什么', goal:'说出它的名字，它是一种什么东西（动物、植物还是身体器官）'},
+      {k:'长什么样', goal:'它的样子：颜色、大小、形状，像什么'},
+      {k:'在哪里', goal:'它住在哪里，或者在身体的什么地方，在哪里能找到它'},
+      {k:'厉害在哪', goal:'它最特别、最厉害的地方，比如毒是怎么起作用的，或者它有什么本领'},
+      {k:'小提醒', goal:'人遇到它要注意什么，或者怎样保护自己、保护它'},
+      {k:'我觉得', goal:'我对它的感受和想法'}
+    ]},
+  event: { name:'写一件事', emoji:'🎈', desc:'今天、周末、假期里发生的事',
+    topics:['周末去公园','第一次自己做早餐','和朋友打篮球','去看牙医','我种的豆子发芽了'],
+    steps:[
+      {k:'时间地点', goal:'事情是什么时候、在哪里发生的'},
+      {k:'有谁', goal:'有谁和我在一起'},
+      {k:'一开始', goal:'一开始发生了什么'},
+      {k:'接着', goal:'接着又发生了什么，最有意思或最难忘的那一刻'},
+      {k:'结果', goal:'最后结果怎么样'},
+      {k:'我觉得', goal:'我的心情和感受，学到了什么'}
+    ]},
+  person: { name:'写一个人', emoji:'👨‍👩‍👧', desc:'家人、朋友、老师',
+    topics:['我的爸爸','我的妈妈','我的好朋友','我的老师','我的爷爷奶奶'],
+    steps:[
+      {k:'他是谁', goal:'这个人是谁，和我是什么关系'},
+      {k:'长什么样', goal:'他的样子，最特别的地方'},
+      {k:'喜欢做什么', goal:'他喜欢做什么，有什么本领或习惯'},
+      {k:'一件小事', goal:'我和他之间发生过的一件具体的小事'},
+      {k:'我想说', goal:'我对他的感受，想对他说的话'}
+    ]}
+};
+
+/* ====== 导航 ====== */
+function show(id){
+  document.querySelectorAll('section.view').forEach(s => s.classList.toggle('active', s.id === id));
+  const navId = (id === 'v-write' || id === 'v-result') ? 'v-home' : id;
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.v === navId));
+  if (id === 'v-book') renderBook();
+  if (id === 'v-game' && !G.base) newGame();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  if (b.dataset.v === 'v-home' && W.type && W.inProgress) show('v-write'); else show(b.dataset.v);
+});
+
+/* ====== 首页 ====== */
+let pickType = null, pickTopic = '';
+function renderHome(){
+  const box = $('#types'); box.innerHTML = '';
+  for (const [id, t] of Object.entries(TYPES)){
+    box.append(h('button', {class:'type' + (pickType === id ? ' on' : ''), onclick:() => { pickType = id; pickTopic = ''; $('#topicIn').value = ''; renderHome(); }},
+      h('div', {class:'em'}, t.emoji), h('b', {}, t.name), h('div', {class:'muted'}, t.desc)));
+  }
+  $('#topicBox').style.display = pickType ? 'block' : 'none';
+  if (!pickType) return;
+  const chips = $('#topicChips'); chips.innerHTML = '';
+  for (const tp of TYPES[pickType].topics){
+    chips.append(h('button', {class:'chip' + (pickTopic === tp ? ' on' : ''), onclick:() => { pickTopic = tp; $('#topicIn').value = ''; renderHome(); }}, tp));
+  }
+}
+$('#topicIn').oninput = () => { pickTopic = ''; document.querySelectorAll('#topicChips .chip').forEach(c => c.classList.remove('on')); };
+$('#startBtn').onclick = () => {
+  const topic = $('#topicIn').value.trim() || pickTopic;
+  if (!topic){ $('#topicIn').focus(); $('#topicIn').placeholder = '先选一个题目，或者自己写一个哦～'; return; }
+  startWrite(pickType, topic);
+};
+renderHome();
+
+/* ====== 写作流程 ====== */
+const W = {type:null, topic:'', step:0, answers:[], followed:false, hint:'', busy:false, inProgress:false, log:[], skill:''};
+function snapshot(){
+  if (!W.inProgress) return;
+  Data.saveDraft({type:W.type, topic:W.topic, step:W.step, answers:W.answers, followed:W.followed, hint:W.hint, skill:W.skill, log:W.log.slice(-80)});
+}
+const chat = $('#chat');
+
+function startWrite(type, topic){
+  Object.assign(W, {type, topic, step:0, followed:false, hint:'', busy:false, inProgress:true, log:[], skill:'',
+    answers: TYPES[type].steps.map(() => ({texts:[]}))});
+  $('#wTitle').textContent = '《' + topic + '》';
+  chat.innerHTML = ''; $('#hintSlot').innerHTML = ''; $('#answer').value = '';
+  show('v-write'); renderSteps();
+  addTeacher(`我们来写《${topic}》！我会一步一步问你问题，你像聊天一样回答就行，说错了也没关系～`);
+  firstQuestion(0);
+}
+$('#quitBtn').onclick = () => { if (confirm('要换个题目吗？现在写的不会保存哦。')){ W.inProgress = false; Data.saveDraft(null); stopSpeak(); renderResume(); show('v-home'); } };
+
+/* 继续上次没写完的 */
+function resumeWrite(d){
+  Object.assign(W, {type:d.type, topic:d.topic, step:d.step, answers:d.answers, followed:!!d.followed, hint:d.hint || '', skill:d.skill || '', busy:false, inProgress:true, log:[]});
+  $('#wTitle').textContent = '《' + W.topic + '》';
+  chat.innerHTML = ''; $('#hintSlot').innerHTML = ''; $('#answer').value = '';
+  show('v-write'); renderSteps();
+  const quiet = autoTTS; autoTTS = false;
+  for (const m of d.log || []){
+    if (m.who === 'kid') addKid(m.text);
+    else if (m.who === 'skill'){ chat.append(h('div', {class:'skillcard'}, '🎒 写作锦囊　' + m.text)); W.log.push(m); }
+    else addTeacher(m.text, m.opt || {});
+  }
+  autoTTS = quiet;
+  addTeacher('欢迎回来！我们接着写～', {praise:true});
+  const lastQ = [...(d.log || [])].reverse().find(m => m.opt?.q);
+  if (W.step >= TYPES[W.type].steps.length) finish();
+  else if (!lastQ) firstQuestion(W.step);
+  else if (autoTTS) speak(lastQ.text);
+}
+function renderResume(){
+  const box = $('#resumeBox'), d = Data.getDraft();
+  box.innerHTML = '';
+  if (!d || !d.type || !TYPES[d.type]) return;
+  box.append(h('div', {class:'challenge', style:'margin:0 0 16px'},
+    h('b', {}, '📌 上次的《' + d.topic + '》还没写完（写到第' + Math.min(d.step + 1, TYPES[d.type].steps.length) + '步）'),
+    h('div', {class:'row', style:'margin-top:8px'},
+      h('button', {class:'btn', onclick:() => resumeWrite(d)}, '接着写 ➜'),
+      h('button', {class:'btn ghost', style:'font-size:17px', onclick:() => { if (confirm('不写这篇了吗？')){ Data.saveDraft(null); renderResume(); } }}, '不写了'))));
+}
+
+function renderSteps(){
+  const T = TYPES[W.type], box = $('#steps'); box.innerHTML = '';
+  T.steps.forEach((s, i) => box.append(h('span', {class:'step' + (i < W.step ? ' done' : i === W.step ? ' cur' : '')}, (i < W.step ? '✓ ' : (i + 1) + '. ') + s.k)));
+  const d = $('#draft'); d.innerHTML = '';
+  T.steps.forEach((s, i) => {
+    const t = W.answers[i].texts.join('，');
+    d.append(h('div', {class:'ditem' + (i === W.step ? ' cur' : '')}, h('div', {class:'lab'}, (i + 1) + '. ' + s.k),
+      h('div', {class:'txt' + (t ? '' : ' empty')}, t || '……')));
+  });
+  $('#skipBtn').textContent = W.answers[W.step]?.texts.length ? '够了，下一步 ➜' : '这步跳过';
+}
+function scrollChat(){ chat.scrollTop = chat.scrollHeight; }
+function addTeacher(text, {q = false, praise = false, err = false} = {}){
+  const bub = h('div', {class:'bub' + (q ? ' q' : '') + (praise ? ' praise' : '') + (err ? ' err' : '')}, text);
+  if (!err) bub.append(h('button', {class:'say', title:'读一读', onclick:() => speak(text)}, '🔊'));
+  if (W.inProgress && !err) W.log.push({who:'t', text, opt:{q, praise}});
+  chat.append(h('div', {class:'msg'}, mascot('sm'), bub)); scrollChat();
+  if ((q || praise) && autoTTS) speak(text);
+  return bub;
+}
+function addKid(text){ chat.append(h('div', {class:'msg kid'}, h('div', {class:'bub'}, text))); scrollChat(); if (W.inProgress) W.log.push({who:'kid', text}); }
+function addLoading(label = ''){
+  const m = h('div', {class:'msg'}, mascot('sm'), h('div', {class:'bub'}, label, h('span', {class:'dots'}, h('span'), h('span'), h('span'))));
+  chat.append(m); scrollChat(); return m;
+}
+function setBusy(b){
+  W.busy = b;
+  ['#sendBtn', '#skipBtn', '#hintBtn', '#micBtn'].forEach(s => $(s).disabled = b);
+}
+function setQ(q, hint, skill){
+  W.hint = (hint || '').trim(); $('#hintSlot').innerHTML = '';
+  addTeacher(q, {q:true});
+  if (skill){ chat.append(h('div', {class:'skillcard'}, '🎒 写作锦囊　' + skill)); scrollChat(); W.log.push({who:'skill', text:skill}); W.skill = skill; }
+  snapshot();
+  $('#answer').focus();
+}
+function fallbackQ(st){ return `说说${st.goal.split('，')[0]}吧！`; }
+function offline(e){ addTeacher('（豆豆老师有点卡：' + e.message + '。先用简单的问题继续～）', {err:true}); }
+function ctx(){
+  const T = TYPES[W.type];
+  let s = `题目：《${W.topic}》（类型：${T.name}）\n骨架：${T.steps.map((x, i) => (i + 1) + '.' + x.k).join(' ')}\n`;
+  const done = W.answers.map((a, i) => (i < W.step && a.texts.length) ? `第${i + 1}步「${T.steps[i].k}」孩子说：${a.texts.join('，')}` : null).filter(Boolean);
+  if (done.length) s += '孩子前面已经说过：\n' + done.join('\n') + '\n';
+  return s;
+}
+
+async function firstQuestion(i){
+  const st = TYPES[W.type].steps[i];
+  setBusy(true); const L = addLoading();
+  try{
+    const r = await ai([{role:'system', content:SYS_GUIDE},
+      {role:'user', content: ctx() + `\n现在开始第${i + 1}步「${st.k}」，目标：${st.goal}。\n请提出这一步的问题，并给出这一步适合用的写作锦囊。输出JSON：{"question":"","hint":"","skill_tip":""}`}]);
+    L.remove(); setQ(r.question || fallbackQ(st), r.hint, r.skill_tip);
+  }catch(e){ L.remove(); offline(e); setQ(fallbackQ(st), ''); }
+  setBusy(false);
+}
+
+async function send(){
+  if (W.busy) return;
+  const text = $('#answer').value.trim();
+  if (!text){ $('#answer').focus(); return; }
+  $('#answer').value = ''; $('#hintSlot').innerHTML = '';
+  addKid(text); W.answers[W.step].texts.push(text); addStars(1); renderSteps(); snapshot();
+  const steps = TYPES[W.type].steps, i = W.step, st = steps[i], nx = steps[i + 1];
+  const canFollow = !W.followed;
+  const prompt = ctx() +
+    `\n现在是第${i + 1}步「${st.k}」，目标：${st.goal}\n孩子这一步说：“${W.answers[i].texts.join('，')}”\n` +
+    (canFollow ? '如果这一步的回答很短（少于10个字）或者太笼统，就在followup里追问一次，让它更具体（可以问颜色、声音、动作、数字、像什么，或者请他试着用上刚才的写作锦囊）；如果已经比较具体，followup留空。'
+               : '这一步已经追问过了，followup必须留空。') + '\n' +
+    (nx ? `下一步是第${i + 2}步「${nx.k}」，目标：${nx.goal}。请在next_question里提出下一步的问题，next_skill_tip是下一步的写作锦囊。` : '这是最后一步，next_question和next_skill_tip留空。') +
+    `\n输出JSON：{"praise":"","followup":"","followup_hint":"","next_question":"","next_hint":"","next_skill_tip":""}`;
+  setBusy(true); const L = addLoading();
+  let r = null;
+  try{ r = await ai([{role:'system', content:SYS_GUIDE}, {role:'user', content:prompt}]); }
+  catch(e){ offline(e); }
+  L.remove(); setBusy(false);
+  if (r?.praise) addTeacher(r.praise, {praise:true});
+  if (r && canFollow && r.followup){ W.followed = true; setQ(r.followup, r.followup_hint); return; }
+  goNext(r?.next_question, r?.next_hint, r?.next_skill_tip);
+}
+
+function goNext(q, hint, skill){
+  const steps = TYPES[W.type].steps;
+  W.step++; W.followed = false; $('#hintSlot').innerHTML = '';
+  if (W.step >= steps.length){ W.step = steps.length; renderSteps(); snapshot(); finish(); return; }
+  renderSteps();
+  if (q) setQ(q, hint, skill); else firstQuestion(W.step);
+}
+
+$('#sendBtn').onclick = send;
+$('#answer').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing){ e.preventDefault(); send(); } });
+$('#skipBtn').onclick = () => { if (!W.busy) goNext(); };
+$('#hintBtn').onclick = () => {
+  $('#hintSlot').innerHTML = '';
+  $('#hintSlot').append(h('div', {class:'hintbox'}, '💡 ' + (W.hint ? '可以想想：' + W.hint : '说你知道的一点点就行，一个词也可以！')));
+  if (autoTTS && W.hint) speak('可以想想：' + W.hint);
+};
+bindMic($('#micBtn'), $('#answer'));
+
+/* ====== 点评 + 润色 ====== */
+let R = null;
+const SCORE_KEYS = ['内容具体', '顺序清楚', '用词生动', '开头结尾'];
+
+async function review({title, material, kind, said, source}){
+  const r = await ai([{role:'system', content:SYS_REVIEW},
+    {role:'user', content:`题目：《${title}》（${kind}）\n${source === 'self' ? '孩子自己写的短文：' : '孩子按顺序说的话：'}\n${material}\n` +
+      `输出JSON：{"title":"","draft":"","polished":"","highlights":[{"before":"","after":"","skill":"","why":""}],"scores":{"内容具体":0,"顺序清楚":0,"用词生动":0,"开头结尾":0},"praise":"","focus":"","challenge":{"sentence":"","task":"","skill":"","example":""},"fact_note":""}`}],
+    {temperature:0.5, max_tokens:2000});
+  return r;
+}
+
+async function finish(){
+  const T = TYPES[W.type];
+  const said = W.answers.map((a, i) => a.texts.length ? `「${T.steps[i].k}」${a.texts.join('，')}` : null).filter(Boolean).join('\n');
+  if (!said){ addTeacher('你还没有说话哦，我们换个题目再试试吧～'); W.inProgress = false; return; }
+  setBusy(true);
+  addTeacher('太棒了！每一步你都完成了 🎉 豆豆老师正在读你的作文，还要给你写评语……', {praise:true});
+  const L = addLoading();
+  let r;
+  try{ r = await review({title:W.topic, material:said, kind:T.name, source:'guided'}); }
+  catch(e){ r = offlineReview(W.answers.filter(a => a.texts.length).map(a => a.texts.join('，') + '。').join('\n'), e); }
+  L.remove(); setBusy(false); W.inProgress = false;
+  openResult(r, {title:W.topic, kind:T.name, said});
+}
+
+function offlineReview(text, e){
+  return {draft:text, polished:'', highlights:[], scores:{}, praise:'', focus:'',
+    fact_note:'豆豆老师刚才掉线了（' + e.message + '），这是你的原话，可以自己加一加标点，等会儿再请老师看。'};
+}
+
+function openResult(r, {title, kind, said = '', source = 'guided'}){
+  Data.saveDraft(null);
+  R = {
+    id: 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), createdAt: Date.now(),
+    title: String(r.title || title).replace(/[《》]/g, '') || title,
+    draft: String(r.draft || ''), polished: String(r.polished || ''),
+    kind, said, source, r, tab:'draft', tries:0, done:false, saved:false
+  };
+  addStars(3); confetti(); renderResult(); show('v-result');
+  persistResult();
+  if (autoTTS && r.praise) speak('豆豆老师说：' + r.praise);
+}
+
+function paras(text){ return String(text).split(/\n+/).map(s => s.replace(/^[\s　]+/, '').trim()).filter(Boolean); }
+function fillEssay(el, text){ el.innerHTML = ''; paras(text).forEach(p => el.append(h('p', {}, p))); }
+
+function renderEssay(){
+  const ess = $('#rEssay'); ess.contentEditable = 'false';
+  $('#rEdit').textContent = '✏️ 我要改一改';
+  $('#rEdit').style.display = R.tab === 'draft' ? '' : 'none';
+  fillEssay(ess, R.tab === 'draft' ? R.draft : (R.polished || '（这次没有润色版）'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.t === R.tab));
+  $('.tab[data-t=polished]').style.display = R.polished ? '' : 'none';
+}
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  if ($('#rEssay').contentEditable === 'true') commitEdit();
+  R.tab = t.dataset.t; renderEssay();
+  if (R.tab === 'polished' && !R.seenPolished){ R.seenPolished = true; addStars(1); }
+});
+
+function stars3(n){ n = Math.max(1, Math.min(3, Number(n) || 1)); return '★'.repeat(n) + '☆'.repeat(3 - n); }
+
+function renderResult(){
+  const r = R.r;
+  $('#rTitle').textContent = R.title;
+  renderEssay();
+  const box = $('#rReview'); box.innerHTML = '';
+
+  // 评分
+  if (r.scores && Object.keys(r.scores).length){
+    box.append(h('div', {class:'scores'}, SCORE_KEYS.filter(k => r.scores[k] != null).map(k =>
+      h('div', {class:'score'}, k, h('b', {}, stars3(r.scores[k]))))));
+  }
+  // 点评
+  const notes = h('div', {class:'notes'});
+  if (r.praise) notes.append(h('div', {class:'note best'}, h('b', {}, '⭐ 老师最喜欢的地方'), h('div', {}, r.praise)));
+  if (r.focus) notes.append(h('div', {class:'note tip'}, h('b', {}, '🌱 下一步可以练'), h('div', {}, r.focus)));
+  if (r.fact_note) notes.append(h('div', {class:'note chg'}, h('b', {}, '🔬 小知识更正'), h('div', {}, r.fact_note)));
+  if (notes.children.length) box.append(notes);
+
+  // 润色点
+  const hls = Array.isArray(r.highlights) ? r.highlights.filter(x => x && x.after) : [];
+  if (hls.length){
+    box.append(h('h3', {style:'margin-top:16px'}, '✨ 老师是怎么润色的？'));
+    box.append(h('div', {class:'muted', style:'margin-bottom:4px'}, '点上面的“老师润色版”看全文，下面是最值得学的几处：'));
+    hls.forEach(x => box.append(h('div', {class:'hl'},
+      x.before ? h('div', {class:'before'}, x.before) : null,
+      h('div', {class:'after'}, '→ ' + x.after),
+      h('div', {}, x.skill ? h('span', {class:'skill'}, x.skill) : null, x.why || ''))));
+  }
+
+  // 升级挑战
+  const ch = r.challenge;
+  if (ch && ch.sentence && ch.task){
+    const inp = h('textarea', {class:'answer', id:'chIn', style:'min-height:64px;margin-top:8px', placeholder:'把这句话改一改，写在这里～'});
+    inp.value = ch.sentence;
+    const fb = h('div', {class:'fb', id:'chFb'});
+    const mic = h('button', {class:'btn blue mic'}, '🎤 说话');
+    const go = h('button', {class:'btn', onclick:() => checkChallenge(inp, fb, go)}, '检查 ✔');
+    const card = h('div', {class:'challenge'},
+      h('h3', {}, '🚀 升级挑战：自己改一句'),
+      h('div', {}, '你写的这句：'), h('div', {class:'orig'}, ch.sentence),
+      h('div', {}, h('span', {class:'skill', style:'background:var(--blue)'}, ch.skill || '方法'), ' ', ch.task),
+      ch.example ? h('div', {class:'muted', style:'margin-top:4px'}, '例子：' + ch.example) : null,
+      inp, h('div', {class:'tools'}, mic, h('span', {class:'spacer'}), go), fb);
+    box.append(card);
+    bindMic(mic, inp);
+    if (R.done){ inp.disabled = true; go.disabled = true; fb.className = 'fb ok'; fb.textContent = '✅ 已经升级好啦，看看“我的作文”里的新句子！'; }
+  }
+
+  $('#rSaidBox').style.display = R.said ? '' : 'none';
+  $('#rSaid').textContent = R.said;
+  $('#rSave').disabled = true; $('#rSave').textContent = '✅ 已自动保存';
+}
+
+async function checkChallenge(inp, fb, btn){
+  const ch = R.r.challenge, txt = inp.value.trim();
+  if (!txt) return;
+  if (txt.replace(/[。！？，\s]/g, '') === ch.sentence.replace(/[。！？，\s]/g, '')){
+    fb.className = 'fb no'; fb.textContent = '还没改呢，试试用上「' + (ch.skill || '方法') + '」！'; return;
+  }
+  btn.disabled = true; fb.className = 'fb'; fb.textContent = '豆豆老师在看……';
+  let r;
+  try{
+    r = await ai([{role:'system', content:SYS_CHALLENGE},
+      {role:'user', content:`原句：“${ch.sentence}”\n要求：${ch.task}（方法：${ch.skill}）\n孩子改成：“${txt}”\n输出JSON：{"ok":true,"praise":"不超过20字","tip":"ok为false时的提示问题，不超过25字","fixed":"改掉错别字、补好标点后的孩子句子"}`}], {temperature:0.3});
+  }catch(e){ r = {ok:true, praise:'改得不错！（老师有点卡，先算你过关）', fixed:txt}; }
+  btn.disabled = false; R.tries++;
+  if (r.ok){
+    const fixed = String(r.fixed || txt).trim();
+    // 把孩子升级后的句子换进“我的作文”
+    const core = ch.sentence.replace(/[。！？!?]$/, '');
+    if (R.draft.includes(core)) R.draft = R.draft.replace(core, fixed.replace(/[。！？!?]$/, ''));
+    R.done = true; addStars(3); confetti(); persistResult();
+    R.tab = 'draft'; renderEssay();
+    fb.className = 'fb ok'; fb.textContent = '✅ ' + (r.praise || '升级成功！') + ' 新句子已经放进“我的作文”里啦。';
+    inp.disabled = true; btn.disabled = true;
+    if (autoTTS) speak(r.praise || '升级成功！');
+  } else {
+    fb.className = 'fb no';
+    fb.textContent = '🤔 ' + (r.tip || '再想想，按要求加一点点就好！') + (R.tries >= 2 && ch.example ? '　看看例子：' + ch.example : '');
+    if (autoTTS) speak(r.tip || '再想想');
+  }
+}
+
+function essayText(){ return [...$('#rEssay').querySelectorAll('p')].map(p => p.innerText.trim()).filter(Boolean).join('\n') || $('#rEssay').innerText.trim(); }
+function commitEdit(){
+  $('#rEssay').contentEditable = 'false'; $('#rEdit').textContent = '✏️ 我要改一改';
+  R.draft = essayText(); addStars(1); persistResult();
+}
+function persistResult(){
+  Data.saveWork({id:R.id, createdAt:R.createdAt, date:new Date(R.createdAt).toLocaleDateString('zh-CN'),
+    title:R.title, text:R.draft, polished:R.polished, kind:R.kind, said:R.said, review:R.r});
+}
+$('#rRead').onclick = () => speak(R.title + '。' + essayText());
+$('#rEdit').onclick = () => {
+  const e = $('#rEssay');
+  if (e.contentEditable === 'true'){ commitEdit(); return; }
+  e.contentEditable = 'true'; $('#rEdit').textContent = '✅ 改好了'; e.focus();
+};
+$('#rCopy').onclick = () => openCopy(R.title, essayText());
+$('#rPrint').onclick = () => printText(R.title, essayText());
+$('#rSave').onclick = () => { if ($('#rEssay').contentEditable === 'true') commitEdit(); else persistResult(); };
+$('#rAgain').onclick = () => { stopSpeak(); if ($('#rEssay').contentEditable === 'true') commitEdit(); pickTopic = ''; $('#topicIn').value = ''; renderHome(); renderResume(); show('v-home'); };
+
+/* ====== 自己写好的作文 ====== */
+$('#selfToggle').onclick = () => { $('#selfBox').classList.toggle('show'); if ($('#selfBox').classList.contains('show')) $('#selfText').focus(); };
+bindMic($('#selfMic'), $('#selfText'));
+$('#selfGo').onclick = async () => {
+  const text = $('#selfText').value.trim();
+  if (text.length < 10){ $('#selfText').focus(); $('#selfText').placeholder = '多写几句再请老师看哦～'; return; }
+  const title = $('#selfTitle').value.trim() || '我的短文';
+  const btn = $('#selfGo'); btn.disabled = true; btn.textContent = '老师在看……';
+  let r;
+  try{ r = await review({title, material:text, kind:'自己写的短文', source:'self'}); }
+  catch(e){ r = offlineReview(text, e); }
+  btn.disabled = false; btn.textContent = '请老师看看 ➜';
+  openResult(r, {title, kind:'自己写的短文', source:'self'});
+};
+
+/* ====== 抄写 / 打印 ====== */
+function openCopy(title, text){ $('#copyTitle').textContent = title; fillEssay($('#copyText'), text); $('#copyOv').classList.add('show'); }
+$('#copyClose').onclick = () => $('#copyOv').classList.remove('show');
+function printText(title, text){
+  const pa = $('#print-area'); pa.innerHTML = '';
+  pa.append(h('h1', {}, title)); paras(text).forEach(p => pa.append(h('p', {}, p)));
+  window.print();
+}
+
+/* ====== 作品本 ====== */
+function saveEntry(e){
+  const now = Date.now();
+  return Data.saveWork({id:'w' + now.toString(36) + Math.random().toString(36).slice(2, 6), createdAt:now, date:new Date(now).toLocaleDateString('zh-CN'), ...e});
+}
+let viewing = null;
+function renderBook(){
+  const list = Data.list(), box = $('#book'); box.innerHTML = '';
+  if (!list.length){ box.append(h('div', {class:'card muted'}, '还没有作品哦，写完一篇就会自动出现在这里。')); return; }
+  list.forEach(e => box.append(h('div', {class:'card entry', onclick:() => openView(e)},
+    h('div', {class:'t'}, e.title), h('div', {class:'m'}, e.date + ' · ' + e.kind), h('div', {class:'p'}, e.text))));
+}
+let viewPol = false;
+function viewBody(){ return viewPol && viewing.polished ? viewing.polished : viewing.text; }
+function renderView(){
+  fillEssay($('#viewText'), viewBody());
+  $('#viewSwitch').style.display = viewing.polished ? '' : 'none';
+  $('#viewSwitch').textContent = viewPol ? '📝 看我的作文' : '✨ 看润色版';
+}
+function openView(e){
+  viewing = e; viewPol = false; $('#viewTitle').textContent = e.title; renderView();
+  $('#viewOv').classList.add('show');
+}
+$('#viewSwitch').onclick = () => { viewPol = !viewPol; renderView(); };
+$('#viewClose').onclick = () => { stopSpeak(); $('#viewOv').classList.remove('show'); };
+$('#viewRead').onclick = () => speak(viewing.title + '。' + viewBody());
+$('#viewCopy').onclick = () => { $('#viewOv').classList.remove('show'); openCopy(viewing.title, viewBody()); };
+$('#viewPrint').onclick = () => printText(viewing.title, viewBody());
+$('#viewDel').onclick = async () => {
+  if (!confirm('真的要删掉这篇吗？')) return;
+  try{ await Data.deleteWork(viewing.id); }catch(e){ toast('删除失败：' + e.message); }
+  $('#viewOv').classList.remove('show'); renderBook();
+};
+
+/* ====== 扩句游戏 ====== */
+const BASES = ['蛇咬人。','蘑菇长大了。','青蛙在叫。','心脏在跳。','蜜蜂飞来了。','河豚鼓起来了。','妈妈做饭。','雨下起来了。','树叶掉了。','小鸟唱歌。','蚂蚁搬家。'];
+const ROUNDS = [
+  {k:'什么样的', ask:'第1轮：给主角加上「什么样的」', ex:'例：小狗跑了 → 一只胖乎乎的小狗跑了'},
+  {k:'在哪里', ask:'第2轮：加上「在哪里」', ex:'例：……小狗在院子里跑了'},
+  {k:'怎么样地', ask:'第3轮：加上「怎么样地」做', ex:'例：……小狗在院子里飞快地跑了'},
+  {k:'结果怎样', ask:'第4轮：最后加上「结果怎么样」', ex:'例：……飞快地跑了，把小鸟吓了一跳'}
+];
+const G = {base:'', versions:[], round:0, busy:false};
+function newGame(base){
+  let b = base;
+  if (!b){ do { b = BASES[Math.floor(Math.random() * BASES.length)]; } while (b === G.base && BASES.length > 1); }
+  Object.assign(G, {base:b, versions:[b], round:0});
+  renderGame();
+}
+function cur(){ return G.versions[G.versions.length - 1]; }
+function renderGame(){
+  $('#gSentence').textContent = cur();
+  const done = G.round >= ROUNDS.length;
+  $('#gRound').textContent = done ? '🎉 句子长大啦！' : ROUNDS[G.round].ask;
+  $('#gEx').textContent = done ? `从 ${G.versions[0].length} 个字长到了 ${cur().length} 个字！` : ROUNDS[G.round].ex;
+  $('#gIn').value = done ? '' : cur().replace(/[。！？]$/, '');
+  $('#gIn').style.display = done ? 'none' : '';
+  ['#gCheck', '#gSkip', '#gMic'].forEach(s => $(s).style.display = done ? 'none' : '');
+  $('#gFb').textContent = ''; $('#gFb').className = 'fb';
+  const L = $('#gLadder'); L.innerHTML = '';
+  G.versions.forEach((v, i) => L.append(h('div', {class:'rung', style:`width:${Math.min(100, 40 + i * 15)}%`}, v)));
+  if (done){
+    L.append(h('div', {class:'row', style:'margin-top:10px'},
+      h('button', {class:'btn green', onclick:e => { saveEntry({title:'扩句：' + G.versions[0], text:G.versions.join('\n'), kind:'扩句游戏'}); e.target.disabled = true; e.target.textContent = '✅ 已存好'; }}, '💾 存进作品本'),
+      h('button', {class:'btn blue', onclick:() => speak(cur())}, '🔊 读一读'),
+      h('button', {class:'btn', onclick:() => newGame()}, '🎲 再来一句')));
+  }
+}
+async function checkGame(){
+  if (G.busy) return;
+  const prev = cur(); let txt = $('#gIn').value.trim();
+  if (!txt) return;
+  if (!/[。！？!?]$/.test(txt)) txt += '。';
+  const fb = $('#gFb');
+  if (txt.replace(/[。！？!?，,\s]/g, '').length <= prev.replace(/[。！？!?，,\s]/g, '').length){
+    fb.className = 'fb no'; fb.textContent = '要在原来的句子上加东西哦，让它变长一点！'; return;
+  }
+  G.busy = true; $('#gCheck').disabled = true; fb.className = 'fb'; fb.textContent = '豆豆老师在看……';
+  let r;
+  try{
+    r = await ai([{role:'system', content:SYS_GAME},
+      {role:'user', content:`原来的句子：“${prev}”\n这一轮要求：加上「${ROUNDS[G.round].k}」\n孩子写的新句子：“${txt}”\n输出JSON：{"ok":true,"praise":"具体夸孩子加的词，15字以内","tip":"如果ok为false，用一个问题提示怎么改，20字以内；ok为true时留空"}`}], {temperature:0.3});
+  }catch(e){ r = {ok:true, praise:'句子变长啦！（豆豆老师有点卡，先算你过关）', tip:''}; }
+  G.busy = false; $('#gCheck').disabled = false;
+  if (r.ok){
+    G.versions.push(txt); G.round++; addStars(1);
+    renderGame();
+    fb.className = 'fb ok'; fb.textContent = '✅ ' + (r.praise || '加得好！');
+    if (autoTTS) speak(r.praise || '加得好！');
+    if (G.round >= ROUNDS.length){ addStars(2); confetti(); }
+  } else {
+    fb.className = 'fb no'; fb.textContent = '🤔 ' + (r.tip || '再想想，按要求加一点点就好！');
+    if (autoTTS) speak(r.tip || '再想想');
+  }
+}
+$('#gCheck').onclick = checkGame;
+$('#gIn').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing){ e.preventDefault(); checkGame(); } });
+$('#gSkip').onclick = () => { G.round++; if (G.round < ROUNDS.length) renderGame(); else renderGame(); };
+$('#gNew').onclick = () => newGame();
+$('#gOwn').onclick = () => {
+  let s = prompt('写一个很短的句子（3到6个字），比如：小鱼游泳');
+  if (!s) return; s = s.trim(); if (!/[。！？]$/.test(s)) s += '。';
+  newGame(s);
+};
+bindMic($('#gMic'), $('#gIn'));
+
+/* ====== 设置 ====== */
+function readForm(){
+  const o = {ttsMode:$('#sTtsMode').value, ttsVoice:$('#sVoice').value, ttsKey:$('#sTtsKey').value.trim()};
+  const c = Object.assign({}, CONFIG);
+  const base = $('#sBase').value.trim(), key = $('#sKey').value.trim(), model = $('#sModel').value.trim();
+  // AI 配置只有改动过才保存，这样默认走启动器转发
+  if (base !== c.baseUrl || key !== c.apiKey || model !== c.model){ o.baseUrl = base; o.apiKey = key; o.model = model; }
+  return o;
+}
+$('#setBtn').onclick = () => {
+  const c = cfg();
+  $('#sBase').value = c.baseUrl; $('#sKey').value = c.apiKey; $('#sModel').value = c.model;
+  $('#sTtsMode').value = c.ttsMode; $('#sVoice').value = c.ttsVoice; $('#sTtsKey').value = c.ttsKey;
+  $('#sMsg').textContent = ''; $('#sTtsMsg').textContent = '';
+  $('#sMode').textContent = PROXY && API ? '✅ 找到了启动器（' + LAUNCHER + '）：AI 和豆包语音都由本机转发。' : PROXY ? '✅ 已通过启动器打开：AI 和豆包语音都由本机转发。' : '现在是直接打开的网页。如果 AI 或豆包语音连不上，请用文件夹里的“启动器”打开。';
+  $('#setDlg').showModal();
+};
+$('#sCancel').onclick = () => $('#setDlg').close();
+$('#sSave').onclick = () => {
+  const f = readForm(); store.set('dd_cfg', f);
+  Data.saveProfile({prefs:{tts:{ttsMode:f.ttsMode, ttsVoice:f.ttsVoice}}});
+  ttsCache.clear(); ttsWarned = 0; renderBadge(); $('#setDlg').close();
+};
+async function withTemp(fn){
+  const old = store.get('dd_cfg', {});
+  store.set('dd_cfg', readForm()); ttsCache.clear();
+  try{ return await fn(); } finally { store.set('dd_cfg', old); }
+}
+$('#sTest').onclick = () => withTemp(async () => {
+  $('#sMsg').textContent = '测试中……';
+  try{ const t = await ai([{role:'user', content:'只回复两个字：你好'}], {json:false}); $('#sMsg').textContent = '✅ 连上了：' + t.slice(0, 20); }
+  catch(e){ $('#sMsg').textContent = '❌ ' + e.message; }
+});
+$('#sTtsTest').onclick = () => withTemp(async () => {
+  const c = cfg();
+  if (c.ttsMode === 'system'){ $('#sTtsMsg').textContent = '系统朗读'; speak('你好，我是豆豆老师，我们一起来写作文吧！'); return; }
+  $('#sTtsMsg').textContent = '合成中……';
+  try{
+    stopSpeak();
+    const url = await doubaoAudio('你好，我是豆豆老师，我们一起来写作文吧！');
+    $('#sTtsMsg').textContent = '✅ 豆包语音正常';
+    await playUrl(url, speakSeq);
+  }catch(e){ $('#sTtsMsg').textContent = '❌ ' + e.message; }
+});
+
+/* ====== 检测是否由启动器打开 ====== */
+let HEALTH = null;
+async function detectLauncher(){
+  const bases = /^https?:$/.test(location.protocol) ? ['', LAUNCHER] : [LAUNCHER];
+  for (const base of bases){
+    try{
+      const r = await fetch(base + 'api/health', {cache:'no-store', credentials:'same-origin'});
+      if (r.ok){ const j = await r.json(); if (j.ok){ PROXY = true; API = base; HEALTH = j; break; } }
+    }catch{}
+  }
+  renderBadge();
+}
+function showLogin(){
+  if ($('#loginOv').classList.contains('show')) return;
+  $('#loginOv').classList.add('show'); setTimeout(() => $('#loginPw').focus(), 50);
+}
+$('#loginLogo').append(mascot());
+async function doLogin(){
+  const pw = $('#loginPw').value.trim(); if (!pw) return;
+  $('#loginGo').disabled = true; $('#loginMsg').textContent = '';
+  try{
+    const r = await fetch('api/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({password:pw})});
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || ('出错了 ' + r.status));
+    $('#loginOv').classList.remove('show'); $('#loginPw').value = '';
+    await startData();
+  }catch(e){ $('#loginMsg').textContent = e.message; }
+  $('#loginGo').disabled = false;
+}
+$('#loginGo').onclick = doLogin;
+$('#loginPw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+async function importLocal(){
+  if (store.get('dd_imported', false)) return;
+  const local = store.get('dd_book', []);
+  if (!local.length){ store.set('dd_imported', true); return; }
+  try{
+    const r = await Data.req('POST', 'api/import', {works:local.map(w => ({...w, id:String(w.id)})), stars:store.get('dd_stars', 0)});
+    store.set('dd_imported', true);
+    if (r.imported){ toast('已把这台设备上的 ' + r.imported + ' 篇作品存到服务器'); await Data.load(); }
+  }catch{}
+}
+async function startData(){
+  try{
+    await Data.load();
+    if (Data.server) await importLocal();
+  }catch(e){ if (!/口令/.test(e.message)) toast('读取数据失败：' + e.message); }
+  renderResume();
+  if ($('#v-book').classList.contains('active')) renderBook();
+}
+(async () => {
+  await detectLauncher();
+  Data.server = !!(PROXY && API === '' && HEALTH && HEALTH.store);
+  if (Data.server && HEALTH.auth && !HEALTH.authed){ showLogin(); return; }
+  await startData();
+})();
+$('#voiceBadge').onclick = async () => { await detectLauncher(); speak(PROXY ? '现在用的是豆包语音。' : '现在用的是系统声音。'); };
+</script>
+</body>
+</html>

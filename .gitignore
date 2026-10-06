@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+*.bak
+*.log
+data/
+tts-cache/
+output/imagegen/bg*.png
+output/imagegen/*-qr.png
+*.tmp
+.DS_Store
